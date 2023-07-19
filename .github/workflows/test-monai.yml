@@ -5,7 +5,18 @@ on:
     types: [opened, synchronize, reopened] # need check
     # branches:
     #   - 'test.*'
-
+  workflow_dispatch:
+    inputs: 
+      UserName: 
+        description: 'harbor username'
+        required: true
+        default: 'xuexue.sun'
+        type: string
+      PassWord:
+        description: 'harbor passwd'
+        required: true
+        type: string
+      
 concurrency:
   group: ${{ github.head_ref }}
   cancel-in-progress: True
@@ -42,15 +53,21 @@ jobs:
   #     - name: Prepare Gherkin exec environ
   #       run: make init-all -C tests
   package:
-    name: build package
+    name: login to Harbor
     runs-on: [self-hosted, s3000]
+    steps:
+      - uses: docker/login-action@v2
+        with:
+            username: ${{ inputs.UserName }}
+            passwrod: ${{ inputs.PassWord }}
     strategy:
       fail-fast: false
+    
     container: 
         image: sh-harbor.mthreads.com/ai_perf/torch_musa_dev
         volumes:
           - /home/compute/xuexue.sun:/xuexue.sun
-        options: --shm-size 10G  
+        options: --privileged --shm-size 10G  --env MUSA_VISIBLE_DEVICES=all
 
     steps:
         - uses: actions/checkout@v3
