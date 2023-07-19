@@ -59,7 +59,7 @@ jobs:
       - uses: docker/login-action@v2
         with:
           username: ${{ inputs.UserName }}
-          password: ${{ secrets.PassWord }}
+          password: ${{ inputs.PassWord }}
     strategy:
       fail-fast: false
     container: 
