@@ -1,0 +1,64 @@
+name: MONAI Test Demo
+run-name: ${{ github.actor }} is testing~~
+on: 
+  pull_request:
+    types: [opened, synchronize, reopened] # need check
+    branches:
+      - 'test*'
+
+concurrency:
+  group: ${{ github.head_ref }}
+  cancel-in-progress: false
+
+defaults:
+    run:
+      shell: bash
+jobs:
+  # lint:
+  #   name: cpplint
+  #   if: ${{ contains(github.event.pull_request.labels.*.name, 'ready-for-testing') && github.event.pull_request.merged != true }}
+  #   runs-on: [self-hosted, s3000]
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #       with:
+  #         ref: ${{ github.event.pull_request.base.sha }}
+  #     - uses: actions/checkout@v3
+  #       with:
+  #         clean: false
+  #     - name: Ensure clang-format-12 is available
+  #       run: |
+  #         command -v clang-format-12 > /dev/null || (sudo apt update && sudo apt install -y clang-format-12)
+  #     - name: Cpplint
+  #       run: |
+  #         ln -snf $PWD/.linters/cpp/hooks/pre-commit.sh $PWD/.linters/cpp/pre-commit.sh
+  #         .linters/cpp/pre-commit.sh $(git --no-pager diff --diff-filter=d --name-only ${{ github.event.pull_request.base.sha }} HEAD)
+  #     - name: Format check
+  #       run: |
+  #         git diff -U0 --no-color ${{ github.event.pull_request.base.sha }} HEAD | /usr/share/clang/clang-format-12/clang-format-diff.py -p1 | tee /tmp/.clang-format-diff
+  #         [ -s /tmp/.clang-format-diff ] && exit 1 || true
+  #     - uses: actions/setup-python@v4
+  #       with:
+  #         python-version: 3.8
+  #     - name: Prepare Gherkin exec environ
+  #       run: make init-all -C tests
+  package:
+    name: build package
+    runs-on: [self-hosted, s3000]
+    strategy:
+      fail-fast: false
+    container: 
+        image: sh-harbor.mthreads.com/ai_perf/torch_musa_dev:new
+        volumes:
+          - /home/compute/xuexue.sun:/xuexue.sun
+        options: --shm-size 10G  
+
+    steps:
+        - uses: actions/checkout@v3
+          with:
+            ref: ${{ github.event.pull_request.base.sha }}
+            clean: false
+        - run:  echo "The job was automatically triggered by a ${{ github.event_name }} event." >> $GITHUB_OUTPUT
+
+  
+
+  
