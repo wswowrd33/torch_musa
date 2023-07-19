@@ -59,12 +59,12 @@ jobs:
       - uses: docker/login-action@v2
         with:
             username: ${{ inputs.UserName }}
-            passwrod: ${{ inputs.PassWord }}
+            password: ${{ inputs.PassWord }}
     strategy:
       fail-fast: false
     
     container: 
-        image: sh-harbor.mthreads.com/ai_perf/torch_musa_dev
+        image: sh-harbor.mthreads.com/ai_perf/torch_musa_dev #sh-harbor.mthreads.com/mt-ai/musa-pytorch-dev:latest 
         volumes:
           - /home/compute/xuexue.sun:/xuexue.sun
         options: --privileged --shm-size 10G  --env MUSA_VISIBLE_DEVICES=all
