@@ -68,7 +68,10 @@ jobs:
         volumes:
           - /home/compute/xuexue.sun:/xuexue.sun
         options: --privileged --shm-size 10G  --env MUSA_VISIBLE_DEVICES=all
-
+  mtgpu:
+    name: hello mtgpu
+    needs: package
+    runs-on: [self-hosted, s3000]
     steps:
         - uses: actions/checkout@v3
           with:
