@@ -15,9 +15,7 @@ on:
   pull_request:
     types: [opened, synchronize, reopened] # need check
     # branches:
-    #   - 'test.*'
-
-        
+    #   - 'test.*'   
       
 concurrency:
   group: ${{ github.head_ref }}
