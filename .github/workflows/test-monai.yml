@@ -47,7 +47,7 @@ jobs:
     strategy:
       fail-fast: false
     container: 
-        image: sh-harbor.mthreads.com/ai_perf/torch_musa_dev:new
+        image: sh-harbor.mthreads.com/ai_perf/torch_musa_dev
         volumes:
           - /home/compute/xuexue.sun:/xuexue.sun
         options: --shm-size 10G  
