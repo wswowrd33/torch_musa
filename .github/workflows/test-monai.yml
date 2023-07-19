@@ -1,17 +1,17 @@
 name: MONAI Test Demo
 run-name: ${{ github.actor }} is testing~~
 on: 
-  workflow_call:
+  workflow_dispatch:
     inputs: 
       UserName: 
         description: 'harbor username'
         required: true
         default: 'xuexue.sun'
         type: string
-    secrets:
       PassWord:
         description: 'harbor passwd'
         required: true
+        type: string
   pull_request:
     types: [opened, synchronize, reopened] # need check
     # branches:
