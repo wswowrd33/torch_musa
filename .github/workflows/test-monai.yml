@@ -67,14 +67,12 @@ jobs:
       #   with:
       #     username: ${{ inputs.UserName }}
       #     password: ${{ inputs.PassWord }}
-
-
-    - name: hello mtgpu
-      uses: actions/checkout@v3
+    - uses: actions/checkout@v3
       with:
         ref: ${{ github.event.pull_request.base.sha }}
         clean: false
-        run: mthreads-gmi && echo "The job was automatically triggered by a ${{ github.event_name }} event." >> $GITHUB_OUTPUT
+    - name: hello mtgpu
+      run: mthreads-gmi 
 
   
 
