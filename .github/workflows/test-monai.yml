@@ -3,8 +3,8 @@ run-name: ${{ github.actor }} is testing~~
 on: 
   pull_request:
     types: [opened, synchronize, reopened] # need check
-    branches:
-      - 'test**'   
+    # branches:
+    #   - 'test**'   
       
 concurrency:
   group: ${{ github.head_ref }}
