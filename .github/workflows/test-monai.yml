@@ -48,14 +48,13 @@ jobs:
         fail-fast: false
     container: 
       image: registry.mthreads.com/mcconline/musa-pytorch-dev-public
+      credentials:
+        username: devuser04@mcconline
+        password: ${{ secrets.DEV_TOKEN }}
       volumes:
           - /home/compute/xuexue.sun:/xuexue.sun
       options: --shm-size 10G  --env MUSA_VISIBLE_DEVICES=all
     steps:
-    - uses: docker/login-action@v2
-      with:
-        username: devuser04@mcconline
-        password: ${{ secrets.DEV_TOKEN }}
     - uses: actions/checkout@v3
       with:
         ref: ${{ github.event.pull_request.base.sha }}
