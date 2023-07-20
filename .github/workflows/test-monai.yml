@@ -53,7 +53,7 @@ jobs:
         password: ${{ secrets.DEV_TOKEN }}
       volumes:
           - /home/compute/xuexue.sun:/xuexue.sun
-      options: --shm-size 10G  --env MUSA_VISIBLE_DEVICES=all 
+      options: --shm-size 10G  --env MTHREADS_VISIBLE_DEVICES=all 
     steps:
     - uses: actions/checkout@v3
       with:
