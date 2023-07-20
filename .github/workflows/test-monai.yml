@@ -61,7 +61,7 @@ jobs:
         clean: false
     - name: hello mtgpu
       working-directory: torch_musa
-      run: python -m pip install pytest &&  pytest -s tests
+      run: echo $PWD && python -m pip install pytest &&  pytest -s tests
 
   
 
