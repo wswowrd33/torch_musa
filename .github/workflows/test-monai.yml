@@ -42,7 +42,7 @@ jobs:
   #     - name: Prepare Gherkin exec environ
   #       run: make init-all -C tests
   build-container:
-    name: login to Harbor
+    name: Hello MT GPU
     runs-on: [self-hosted, s3000]
     strategy:
         fail-fast: false
@@ -53,14 +53,15 @@ jobs:
         password: ${{ secrets.DEV_TOKEN }}
       volumes:
           - /home/compute/xuexue.sun:/xuexue.sun
-      options: --privileged --shm-size 10G  --env MUSA_VISIBLE_DEVICES=all 
+      options: --shm-size 10G  --env MUSA_VISIBLE_DEVICES=all 
     steps:
     - uses: actions/checkout@v3
       with:
         ref: ${{ github.event.pull_request.base.sha }}
         clean: false
     - name: hello mtgpu
-      run: mthreads-gmi 
+      working-directory: torch_musa
+      run: pytest -s tests
 
   
 
