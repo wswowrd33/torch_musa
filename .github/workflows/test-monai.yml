@@ -60,7 +60,6 @@ jobs:
         ref: ${{ github.event.pull_request.base.sha }}
         clean: false
     - name: hello mtgpu
-      working-directory: torch_musa
       run: echo $PWD && python -m pip install pytest &&  pytest -s tests
 
   
