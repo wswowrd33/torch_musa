@@ -3,12 +3,12 @@ run-name: ${{ github.actor }} is testing~~
 on: 
   pull_request:
     types: [opened, synchronize, reopened] # need check
-    branches:
-      - 'test*'
-
+    # branches:
+    #   - 'test**'   
+      
 concurrency:
   group: ${{ github.head_ref }}
-  cancel-in-progress: false
+  cancel-in-progress: True
 
 defaults:
     run:
@@ -41,24 +41,34 @@ jobs:
   #         python-version: 3.8
   #     - name: Prepare Gherkin exec environ
   #       run: make init-all -C tests
-  package:
-    name: build package
+  build-container:
+    name: Hello MT GPU
     runs-on: [self-hosted, s3000]
     strategy:
-      fail-fast: false
+        fail-fast: false
     container: 
-        image: sh-harbor.mthreads.com/ai_perf/torch_musa_dev:new
-        volumes:
+      image: registry.mthreads.com/mcconline/musa-pytorch-dev-public
+      credentials:
+        username: devuser04@mcconline
+        password: ${{ secrets.DEV_TOKEN }}
+      volumes:
           - /home/compute/xuexue.sun:/xuexue.sun
-        options: --shm-size 10G  
-
+      options: --privileged --shm-size 10G  --env MTHREADS_VISIBLE_DEVICES=all 
     steps:
-        - uses: actions/checkout@v3
-          with:
-            ref: ${{ github.event.pull_request.base.sha }}
-            clean: false
-        - run:  echo "The job was automatically triggered by a ${{ github.event_name }} event." >> $GITHUB_OUTPUT
-
+    - uses: actions/checkout@v3
+      with:
+        ref: ${{ github.event.pull_request.base.sha }}
+        clean: false
+    - name: build
+      run: |
+        . /opt/conda/etc/profile.d/conda.sh && conda activate py38
+        pip uninstall torch_musa -y
+        bash build.sh -m
+    - name: test
+      run: |
+        . /opt/conda/etc/profile.d/conda.sh && conda activate py38
+        pytest -s tests
+        
   
 
   
