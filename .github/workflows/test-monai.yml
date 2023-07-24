@@ -62,7 +62,7 @@ jobs:
     - name: build
       run: |
         . /opt/conda/etc/profile.d/conda.sh && conda activate py38
-        pip uninstall torch_musa
+        pip uninstall torch_musa -y
         bash build.sh -m
     - name: test
       run: |
