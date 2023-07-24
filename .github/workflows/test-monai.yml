@@ -53,15 +53,22 @@ jobs:
         password: ${{ secrets.DEV_TOKEN }}
       volumes:
           - /home/compute/xuexue.sun:/xuexue.sun
-      options: --shm-size 10G  --env MTHREADS_VISIBLE_DEVICES=all 
+      options: --privilege --shm-size 10G  --env MTHREADS_VISIBLE_DEVICES=all 
     steps:
     - uses: actions/checkout@v3
       with:
         ref: ${{ github.event.pull_request.base.sha }}
         clean: false
-    - name: hello mtgpu
-      # run: echo $PWD && python -m pip install pytest &&  pytest -s tests
-      run: sleep 360000
+    - name: build
+      run: |
+        . /opt/conda/etc/profile.d/conda.sh && conda activate py38
+        pip uninstall torch_musa
+        bash build.sh -m
+    - name: test
+      run: |
+        . /opt/conda/etc/profile.d/conda.sh && conda activate py38
+        pytest -s tests
+        
   
 
   
